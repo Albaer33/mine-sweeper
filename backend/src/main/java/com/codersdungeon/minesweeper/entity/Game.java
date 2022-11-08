@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="games")
 @Data
@@ -22,6 +24,8 @@ public class Game {
     @ManyToOne
     @JoinColumn(name = "player_id")
     private Player player;
+    @Column
+    private LocalDateTime startDate;
     @Column
     private Integer time;
     @Column
