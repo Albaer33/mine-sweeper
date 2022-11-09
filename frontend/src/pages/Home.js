@@ -1,16 +1,12 @@
-import React from 'react'
+const Home = ({user}) => {
 
-export default class Home extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+    return (
+        <section>
+            <h4>Minesweeper</h4>
+            {user && <p>Welcome, {user.username}</p>}
+        </section>
+    )
 
-    render = () => {
-        return (
-            <section className='section'>
-                <h2>home</h2>
-                <p>Minesweeper</p>
-            </section>
-        )
-    }
 }
+
+export default Home

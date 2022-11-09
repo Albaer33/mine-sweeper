@@ -1,18 +1,31 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 
-export default class Error extends React.Component {
-    constructor(props) {
-        super(props)
+const Error = ({ error }) => {
+
+    useEffect(() => {
+
+    })
+
+    if (!error) {
+        return
     }
 
-    render = () => {
-        return (
-            <section className='section'>
-                <h2>404</h2>
-                <p>Page not found</p>
-                <Link to='/' className='btn'>Home</Link>
-            </section>
-        )
-    }
+    return (
+        <section>
+            <h4>{error.status} : {error.error}</h4>
+            <p>
+                <dl>
+                    <dt>Timestamp</dt>
+                    <dd>{new Date(error.timestamp).toLocaleString('it-IT')}</dd>
+                    <dt>Path</dt>
+                    <dd>{error.path}</dd>
+                    <dt>Message</dt>
+                    <dd>{error.message}</dd>
+                </dl>
+            </p>
+        </section>
+    )
+
 }
+
+export default Error

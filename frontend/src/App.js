@@ -1,6 +1,6 @@
 import './App.css'
 import { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Home from './pages/Home'
 import NewGame from './pages/NewGame'
@@ -10,12 +10,14 @@ import Login from './pages/Login'
 import Logout from './pages/Logout'
 import Error from './pages/Error'
 import SharedLayout from './pages/SharedLayout'
-import Games from './pages/Games'
 import ProtectedRoute from './pages/ProtectedRoute'
 
 const App = () => {
 
   const [user, setUser] = useState(null)
+  const [error, setError] = useState(null)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
 
@@ -25,7 +27,10 @@ const App = () => {
     axios.defaults.withCredentials = true
 
     axios.interceptors.response.use((response) => response, (error) => {
-      console.log(error)
+      console.log(error.response.data)
+      setError(error.response.data)
+      navigate('error')
+      return Promise.reject(error)
     })
 
     axios.defaults.auth = {
@@ -33,21 +38,20 @@ const App = () => {
       password: user?.password
     }
 
-  }, [user])
+  }, [user, navigate])
 
   return (
     <Routes>
       <Route path='/' element={<SharedLayout user={user} />} >
-        <Route index element={<Home />} />
-        <Route path='/login' element={<Login setUser={setUser} />} />
-        <Route path='/logout' element={<Logout setUser={setUser} />} />
+        <Route index element={<Home user={user}/>} />
+        <Route path='/login' element={<Login setUser={setUser} setError={setError}/>} />
+        <Route path='/logout' element={<Logout user={user} setUser={setUser} setError={setError}/>} />
         <Route path='/games' element={<ProtectedRoute user={user} />}>
-          <Route index element={<Games user={user} />} />
           <Route path='new' element={<NewGame />} />
           <Route path=':gameId' element={<Game />} />
           <Route path='list' element={<GameList />} />
         </Route>
-        <Route path='*' element={<Error />} />
+        <Route path='*' element={<Error error={error}/>} />
       </Route>
     </Routes>
   )
