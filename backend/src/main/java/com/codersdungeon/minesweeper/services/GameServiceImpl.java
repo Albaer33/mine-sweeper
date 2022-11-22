@@ -3,6 +3,7 @@ package com.codersdungeon.minesweeper.services;
 import com.codersdungeon.minesweeper.dtos.RequestGameDTO;
 import com.codersdungeon.minesweeper.dtos.ResponseGameDTO;
 import com.codersdungeon.minesweeper.dtos.ResponseLoadGameDTO;
+import com.codersdungeon.minesweeper.dtos.ResponseStartDTO;
 import com.codersdungeon.minesweeper.entity.Board;
 import com.codersdungeon.minesweeper.entity.Cell;
 import com.codersdungeon.minesweeper.entity.Game;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -45,12 +47,15 @@ public class GameServiceImpl implements GameService {
         responseGameDTO.setGameId(savedGame.getGameId());
 
         return responseGameDTO;
+
     }
 
     @Override
     public void deleteGame(Integer gameId) {
+
         Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException("Game not found"));
         gameRepository.delete(game);
+
     }
 
     @Override
@@ -79,6 +84,21 @@ public class GameServiceImpl implements GameService {
         dto.setCells(matrix);
 
         return dto;
+
+    }
+
+    @Override
+    public ResponseStartDTO startGame(Integer gameId) {
+
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException("game not found"));
+        game.setStartDate(LocalDateTime.now());
+        gameRepository.save(game);
+
+        ResponseStartDTO dto = new ResponseStartDTO();
+        dto.setStartDate(game.getStartDate());
+
+        return dto;
+
     }
 
     @Override
