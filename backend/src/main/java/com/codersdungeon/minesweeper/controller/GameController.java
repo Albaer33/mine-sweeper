@@ -2,6 +2,7 @@ package com.codersdungeon.minesweeper.controller;
 
 import com.codersdungeon.minesweeper.dtos.RequestGameDTO;
 import com.codersdungeon.minesweeper.dtos.ResponseGameDTO;
+import com.codersdungeon.minesweeper.dtos.ResponseLoadGameDTO;
 import com.codersdungeon.minesweeper.entity.Game;
 import com.codersdungeon.minesweeper.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class GameController {
     }
 
     @GetMapping("/game/{gameId}")
-    public ResponseGameDTO findGameById(@PathVariable Integer gameId) {
+    public ResponseLoadGameDTO loadGame(@PathVariable Integer gameId) {
 
-        ResponseGameDTO dto = gameService.findGameById(gameId);
+        ResponseLoadGameDTO dto = gameService.loadGame(gameId);
 
         return dto;
     }
@@ -37,6 +38,11 @@ public class GameController {
     @DeleteMapping("/game/{gameId}")
     public void deleteGame(@PathVariable Integer gameId) {
         gameService.deleteGame(gameId);
+    }
+
+    @PutMapping("/game/{gameId}/pause")
+    public void pauseGame(@PathVariable Integer gameId) {
+        gameService.pauseGame(gameId);
     }
 
 }
