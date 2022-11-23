@@ -11,9 +11,7 @@ import com.codersdungeon.minesweeper.exceptions.BoardNotFoundException;
 import com.codersdungeon.minesweeper.exceptions.GameNotFoundException;
 import com.codersdungeon.minesweeper.repository.BoardRepository;
 import com.codersdungeon.minesweeper.repository.GameRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -103,6 +101,9 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void pauseGame(Integer gameId) {
+
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException("Game not found"));
+        game.setTime(0);
 
     }
 
